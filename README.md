@@ -16,20 +16,6 @@ A simple and modular **CLI-based PyTorch Lightning project** for classifying nam
 
 ## 🚀 Getting Started
 
-### 🧱 Installation
-
-```bash
-pip install torch lightning
-```
-
-Or if you're using `requirements.txt`, include:
-```txt
-torch
-lightning
-```
-
----
-
 ## 📂 Dataset Format
 
 Training data should be structured as follows:
