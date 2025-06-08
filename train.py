@@ -1,8 +1,9 @@
 import argparse
 
 import lightning as L
+import torch
 from dataset import N_CHARS, CharDataset
-from nn import CRITERION, CharRNN, LigthningWrapper
+from nn import CharRNN, LigthningWrapper
 from torch.utils.data import DataLoader, Dataset, random_split
 
 _CLI_DESCRIPTION = """
@@ -77,7 +78,7 @@ def train(
 
     model = LigthningWrapper(
         module=CharRNN,
-        criterion=CRITERION,
+        criterion=torch.nn.NLLLoss,
         module__rnn_cell=rnn_cell,
         module__input_size=input_size,
         module__output_size=output_size,

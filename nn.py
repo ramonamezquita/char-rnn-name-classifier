@@ -5,8 +5,6 @@ import torch
 from torch import nn
 from torch.nn.utils.rnn import pack_padded_sequence
 
-CRITERION = torch.nn.NLLLoss
-
 
 class LigthningWrapper(L.LightningModule):
 
@@ -90,7 +88,19 @@ class LigthningWrapper(L.LightningModule):
 
 
 class CharRNN(nn.Module):
-    """Character level RNN"""
+    """Character level RN
+
+    Parameters
+    ----------
+    input_size : int
+        Input size.
+
+    output_size : int
+        Output size.
+
+    hidden_size : int, default=16
+        Hidden size.
+    """
 
     def __init__(
         self,
@@ -110,15 +120,12 @@ class CharRNN(nn.Module):
         ----------
         x_dict: dict[str, torch.Tensor]
             Dictionary with keys:
-            "inputs": torch.Tensor (shape B x T x F)
-            Contains one hot encoded zero-padded character lines.
-            Each line is represented by a T x F matrix where T
-            is the number of characters and F the dimension of the
-            embedding space (vocabulary size).
-
-            "lengths": torch.Tensor (shape B)
-            Lenght of the original lines (before padding).
-            Used for packing padded sequences.
+            - "inputs": torch.Tensor (shape B x T x F)
+            Contains one hot encoded zero-padded character lines. Each line is represented by a
+            T x F matrix where T is the number of characters and F the dimension of the embedding
+            space (which, for this case, is equal to the vocabulary size).
+            - "lengths": torch.Tensor (shape B)
+            Lenght of the original lines (before padding). Used for packing padded sequences.
 
             where:
                 B: batch size.
