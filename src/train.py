@@ -2,7 +2,7 @@ import argparse
 
 import lightning as L
 import torch
-from dataset import N_CHARS, CharDataset
+from dataset import N_CHARS, WordsDataset
 from nn import CharRNN, LigthningWrapper
 from torch.utils.data import DataLoader, Dataset, random_split
 
@@ -24,14 +24,6 @@ def create_parser() -> argparse.ArgumentParser:
         type=str,
         required=True,
         help="[Required] Data directory.",
-    )
-    parser.add_argument(
-        "-r",
-        "--rnn",
-        type=str,
-        help="RNN cell.",
-        default="rnn",
-        choices=("rnn", "lstm", "gru"),
     )
     parser.add_argument(
         "-s",
@@ -60,7 +52,6 @@ def create_parser() -> argparse.ArgumentParser:
 
 def train(
     tr: Dataset,
-    rnn_cell: str,
     input_size: int,
     output_size: int,
     hidden_size: int = 32,
@@ -79,7 +70,6 @@ def train(
     model = LigthningWrapper(
         module=CharRNN,
         criterion=torch.nn.NLLLoss,
-        module__rnn_cell=rnn_cell,
         module__input_size=input_size,
         module__output_size=output_size,
         module__hidden_size=hidden_size,
@@ -89,7 +79,7 @@ def train(
     train_loader = DataLoader(
         tr,
         batch_size=batch_size,
-        collate_fn=CharDataset.collate_fn,
+        collate_fn=WordsDataset.collate_fn,
         shuffle=True,
         num_workers=num_workers,
     )
@@ -98,7 +88,7 @@ def train(
         DataLoader(
             val,
             batch_size=batch_size,
-            collate_fn=CharDataset.collate_fn,
+            collate_fn=WordsDataset.collate_fn,
             num_workers=10,
         )
         if val is not None
@@ -118,7 +108,7 @@ def main():
 
     parser = create_parser()
     args = parser.parse_args()
-    dataset = CharDataset.from_dirpath(args.dirpath)
+    dataset = WordsDataset.from_dirpath(args.dirpath)
     dataset_params = {"labels_unique": dataset.labels_unique}
     output_size = len(dataset.labels_unique)
     input_size = N_CHARS
@@ -126,7 +116,6 @@ def main():
 
     train(
         tr,
-        rnn_cell=args.rnn,
         input_size=input_size,
         output_size=output_size,
         hidden_size=args.hidden_size,

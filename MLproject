@@ -1,0 +1,8 @@
+name: char-rnn-name-classifier
+
+entry_points:
+  train:
+    parameters:
+      dirpath: {type: path, default: data/names}
+      max_epochs: {type: int, default: 10}
+    command: "python src/train.py --dirpath {dirpath} --max_epochs {max_epochs}"

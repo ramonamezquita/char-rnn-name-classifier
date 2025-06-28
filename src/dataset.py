@@ -52,7 +52,6 @@ class WordsDataset(Dataset):
     ----------
     words : list[str]
         List of input words.
-
     labels : list[str]
         List of target labels.
 
@@ -96,11 +95,13 @@ class WordsDataset(Dataset):
     def from_dirpath(cls, dirpath: str, ext: str = ".txt") -> WordsDataset:
         filepaths = [f for f in listdir(dirpath) if isfile(join(dirpath, f)) and f.endswith(ext)]
 
-        words = []
+        if not filepaths:
+            raise ValueError("Filepaths not found")
+
+        words  = []
         labels = []
 
-        # For each file, extract its name (the target label) and its content
-        # (the input lines).
+        # For each file, extract its name (the target label) and its content (the input words).
         for f in filepaths:
             filepath = join(dirpath, f)
 

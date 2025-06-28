@@ -1,0 +1,4 @@
+mlflow-skinny>=2.0.0
+numpy>=1.21.0
+torch==2.3.0
+lightning==2.5.2
