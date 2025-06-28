@@ -2,16 +2,6 @@
 
 A simple and modular **CLI-based PyTorch Lightning project** for classifying names by their origin using a **Character-Level Recurrent Neural Network (RNN)**. The model reads names as sequences of characters and predicts their class (e.g., nationality) using an RNN-based architecture.
 
----
-
-## Features
-
-- Simple CLI interface for training and prediction  
-- Lightning-powered training loop  
-- Custom PyTorch `Dataset` and collation for variable-length sequences  
-- Predicts from a checkpointed model with a one-liner CLI call
-
----
 
 
 ## Dataset Format
@@ -40,25 +30,19 @@ William
 
 ---
 
-## 🏋️Training
+## Running
+
+Build the image for the project's Docker container environment.
 
 ```bash
-python train.py \
-  --dirpath ./data \
-  --hidden_size 128 \
-  --max_epochs 20 \
-  --val 0.2
+docker build -t char-rnn-name-classifier .
 ```
 
----
+The code is wrapped as a MLflow project, so it  can be run using `mlflow run`.
 
-## Predicting
 
 ```bash
-python predict.py \
-  -x "Satoshi,Nikolai,Ahmed" \
-  --sep "," \
-  --ckpt path/to/your_checkpoint.ckpt
+docker run char-rnn-name-classifier mlflow run . --env-manager local --entry-point train
 ```
 
 
@@ -80,17 +64,7 @@ It uses packed padded sequences for efficient processing of variable-length inpu
 
 ---
 
-## Code Structure
 
-```
-.
-├── dataset.py     # Dataset and preprocessing
-├── nn.py          # Model architecture and LightningModule
-├── train.py       # CLI training script
-├── predict.py     # CLI prediction script
-```
-
----
 
 
 ## Credits
